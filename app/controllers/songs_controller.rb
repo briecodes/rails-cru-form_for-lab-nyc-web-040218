@@ -1,4 +1,7 @@
 class SongsController < ApplicationController
+    def index
+        @songs = Song.all
+    end
     def show
         @song = Song.find(params[:id])
     end
@@ -19,11 +22,8 @@ class SongsController < ApplicationController
     end
 
     def create
-        @song = Song.new(post_params(params[:song][:name]))
+        @song = Song.new(post_params(params[:song]))
         @song.save
-
-        @artist = Artist.find_or_create_by(artist_id: params[:song][:artist_id])
-        
 
         redirect_to song_path(@song)
     end
@@ -31,7 +31,7 @@ class SongsController < ApplicationController
     private
 
         def post_params(*args)
-            params.require(:song).permit(args)
+            params.require(:song).permit(:name, :artist_id, :genre_id)
         end
 
         def post_params2(*args)
